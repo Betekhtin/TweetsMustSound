@@ -7,7 +7,6 @@ api = twitter.Api(consumer_key = secrets.consumer_key,
 				  access_token_key = secrets.access_token_key,
 				  access_token_secret = secrets.access_token_secret)
 
-
 class TwitMiner:
 	def __init__(self):
 		self.api = 	twitter.Api(consumer_key = secrets.consumer_key,
