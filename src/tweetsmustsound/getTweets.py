@@ -40,9 +40,8 @@ class TwitMiner:
 		#						  	      max_id = lastId)
 		
 		statuses_text = [(s.text) for s in statuses]
-		hashes = [self.get_hashes(s) for s in statuses_text]
+		hashes = [self.get_hashes(self, s) for s in statuses_text]
 		statuses_text = [self.clean_tweet(s.text) for s in statuses]
-		statuses_by_hashes = api.GetSearch(query_row = "q=")
 		return statuses_text;
 
 	def eng_tweets(statuses):
@@ -53,13 +52,6 @@ class TwitMiner:
 		return result
 
 uname = "realDonaldTrump"
-api = twitter.Api(consumer_key = secrets.consumer_key,
-				  consumer_secret = secrets.consumer_secret,
-				  access_token_key = secrets.access_token_key,
-				  access_token_secret = secrets.access_token_secret)
-t = api.GetSearch("q=%23nasa")
-print(len(t))	
-#gtw = TwitMiner
-#tw = gtw.get_tweets(gtw,uname)
-#for i in tw:
-#	print(gtw.get_hashes(gtw,i))
+gtw = TwitMiner
+tw = gtw.get_tweets(gtw,uname)
+print(tw)
