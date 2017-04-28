@@ -19,7 +19,7 @@ class TwitMiner:
 	def get_hashes(tweet_text):
 		hashes = [s for s in tweet_text.split() if (s[0]=='#')]
 	def get_tweets(self, username):
-		statuses = api.GetUserTimeline(screen_name = username)
+		statuses = api.GetUserTimeline(screen_name = username, count = 200)
 		statuses_text = [self.clean_tweet(s.text) for s in statuses]
 		return statuses_text;
 
