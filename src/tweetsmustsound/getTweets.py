@@ -2,19 +2,17 @@ import twitter
 import secrets
 import re
 
-api = twitter.Api(consumer_key = secrets.consumer_key,
-				  consumer_secret = secrets.consumer_secret,
-				  access_token_key = secrets.access_token_key,
-				  access_token_secret = secrets.access_token_secret)
-
 class TwitMiner:
 	def __init__(self):
 		self.api = 	twitter.Api(consumer_key = secrets.consumer_key,
 				  consumer_secret = secrets.consumer_secret,
 				  access_token_key = secrets.access_token_key,
 				  access_token_secret = secrets.access_token_secret)
-	def clean_tweet(tweet):
-		return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+
+	def clean_tweet(self, tweet):
+		text = re.sub(r"^https?:\/\/.*[\r\n]*", '', tweet, flags=re.MULTILINE)
+		return ' '.join(re.sub("(@[A-Za-z]+)|([^A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
+
 	def get_hashes(self, tweet_text):
 		hashes = [s for s in tweet_text.split() if (s[0]=='#')]
 		nhashes=[]
@@ -29,7 +27,7 @@ class TwitMiner:
 		return nhashes
 
 	def get_tweets(self, username):
-		statuses = api.GetUserTimeline(screen_name = username, count = 200)
+		statuses = self.api.GetUserTimeline(screen_name = username, count = 200)
 		
 		#iterations = min(tweets[0].user.statuses_count // 200, 16)
 
@@ -40,11 +38,19 @@ class TwitMiner:
 		#						  	      max_id = lastId)
 		
 		statuses_text = [(s.text) for s in statuses]
-		hashes = [self.get_hashes(self, s) for s in statuses_text]
+		#hashes = list(filter(None,[self.get_hashes(s) for s in statuses_text]))
+		st_hashes = [self.get_hashes(s) for s in statuses_text]
 		statuses_text = [self.clean_tweet(s.text) for s in statuses]
-		return statuses_text;
-
-	def eng_tweets(statuses):
+		hash_stat =[]
+		for h in st_hashes:
+			t=[]
+			for i in h:
+				if len(i)>0:
+					it_data = self.api.GetSearch(raw_query = "q=twitter%20&count=20&" + i)
+					t = [self.clean_tweet(s.text) for s in it_data]
+			hash_stat.append(t)
+		return statuses_text,hash_stat
+	def eng_tweets(self, statuses):
 		result = []
 		for status in statuses:
 			if status.lang == "en":
@@ -52,6 +58,5 @@ class TwitMiner:
 		return result
 
 uname = "realDonaldTrump"
-gtw = TwitMiner
-tw = gtw.get_tweets(gtw,uname)
-print(tw)
+gtw = TwitMiner()
+tw,htw = gtw.get_tweets(uname)
