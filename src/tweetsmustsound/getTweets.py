@@ -36,6 +36,13 @@ class TwitMiner:
 		statuses_by_hashes = api.GetSearch(query_row = "q=")
 		return statuses_text;
 
+	def eng_tweets(statuses):
+		result = []
+		for status in statuses:
+			if status.lang == "en":
+				result.append(status)
+		return result
+
 uname = "realDonaldTrump"
 api = twitter.Api(consumer_key = secrets.consumer_key,
 				  consumer_secret = secrets.consumer_secret,
