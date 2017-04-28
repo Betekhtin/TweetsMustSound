@@ -10,7 +10,7 @@ class TwitMiner:
 				  access_token_secret = secrets.access_token_secret)
 
 	def clean_tweet(self, tweet):
-		text = re.sub(r"^https?:\/\/.*[\r\n]*", '', tweet, flags=re.MULTILINE)
+		text = re.sub(r"^https?:\/\/.*[\r\n]*", '', tweet, flags=re.MULTILINE))
 		return ' '.join(re.sub("(@[A-Za-z]+)|([^A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
 
 	def get_hashes(self, tweet_text):
@@ -44,7 +44,6 @@ class TwitMiner:
 		hash_stat =[]
 		for h in st_hashes:
 			for i in h:
-				print(i)
 				t=[]
 				if len(i)>0:
 					it_data = self.api.GetSearch(raw_query = "q=twitter%20 +" + i + "&lang=en&count=20")
