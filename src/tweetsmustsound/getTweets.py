@@ -27,13 +27,16 @@ class TwitMiner:
 		return nhashes
 
 	def get_tweets(self, username):
-		#statuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&lang=en&count=200")
-		statuses = self.api.GetUserTimeline(screen_name = username, count = 200)
+		statuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&lang=en&count=200")
+		#statuses = self.api.GetUserTimeline(screen_name = username, count = 200)
 		iterations = min(statuses[0].user.statuses_count // 200, 16)
 		statuses = [s for s in statuses if '#' in s.text]
+		print([(s.text) for s in statuses if '#' in s.text])
 		for i in range(0,iterations):
 			lastId = statuses[-1].id
 			nst = self.api.GetSearch(raw_query = "q=from%3A" + username + "&since_id="+str(lastId)+"&lang=en&count=200")
+			print(nst[0])
+			print(nst[-1])
 			statuses += [s for s in nst if '#' in s.text]
 			if len(statuses)>=200:
 				break
@@ -45,7 +48,7 @@ class TwitMiner:
 			for i in h:
 				t=[]
 				if len(i)>0:
-					it_data = self.api.GetSearch(raw_query = "q=twitter%20&count=20&lang=en" +"%20"+i)
+					it_data = self.api.GetSearch(raw_query = "q=twitter%20&lang=en" +"%20" + i + "&count=20")
 					t = [self.clean_tweet(s.text) for s in it_data]
 				hash_stat.append(t)
 		return statuses_text, hash_stat
