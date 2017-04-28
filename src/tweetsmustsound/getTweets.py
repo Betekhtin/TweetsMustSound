@@ -10,7 +10,7 @@ class TwitMiner:
 				  access_token_secret = secrets.access_token_secret)
 
 	def clean_tweet(self, tweet):
-		text = re.sub(r"^https?:\/\/.*[\r\n]*", '', tweet, flags=re.MULTILINE))
+		text = re.sub(r"^https?:\/\/.*[\r\n]*", '', tweet, flags=re.MULTILINE)
 		return ' '.join(re.sub("(@[A-Za-z]+)|([^A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
 
 	def get_hashes(self, tweet_text):
@@ -27,16 +27,17 @@ class TwitMiner:
 		return nhashes
 
 	def get_tweets(self, username):
-		statuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&lang=en&count=220")
+		numofload=5
+		statuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&lang=en&count=" + str(numofload))
 		#statuses = self.api.GetUserTimeline(screen_name = username, count = 200)
-		iterations = min(statuses[0].user.statuses_count // 200, 16)
+		iterations = min(statuses[0].user.statuses_count // numofload, 16)
 		statuses = [s for s in statuses if '#' in s.text]
 		for i in range(0,iterations):
 			lastId = statuses[-1].id
-			nst = self.api.GetSearch(raw_query = "q=from%3A" + username + "&max_id="+str(lastId)+"&lang=en&count=220")
+			nst = self.api.GetSearch(raw_query = "q=from%3A" + username + "&max_id="+str(lastId)+"&lang=en&count="+str(numofload))
 			q = [s for s in nst if '#' in s.text]
 			statuses += q
-			if len(statuses)>=200:
+			if len(statuses)>=numofload:
 				break
 		statuses_text = [(s.text) for s in statuses]
 		st_hashes = [self.get_hashes(s) for s in statuses_text]
@@ -46,7 +47,7 @@ class TwitMiner:
 			for i in h:
 				t=[]
 				if len(i)>0:
-					it_data = self.api.GetSearch(raw_query = "q=twitter%20 +" + i + "&lang=en&count=20")
+					it_data = self.api.GetSearch(raw_query = "q=twitter%20 +" + i + "&lang=en&count="+str(numofload/4))
 					t = [self.clean_tweet(s.text) for s in it_data]
 				hash_stat.append(t)
 		return statuses_text, hash_stat
@@ -62,3 +63,5 @@ uname = "jayzclassicbars"
 
 gtw = TwitMiner()
 tw,htw = gtw.get_tweets(uname)
+for i in htw:
+	print(i)
