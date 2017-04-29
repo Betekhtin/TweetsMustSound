@@ -1,5 +1,5 @@
 import twitter
-import tweets/secrets
+from tweets import secrets
 import re
 
 api = twitter.Api(consumer_key = secrets.consumer_key,
@@ -50,8 +50,3 @@ class TwitMiner:
 			if status.lang == "en":
 				result.append(status)
 		return result
-
-uname = "realDonaldTrump"
-gtw = TwitMiner
-tw = gtw.get_tweets(gtw,uname)
-print(tw)

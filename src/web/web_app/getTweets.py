@@ -1,5 +1,5 @@
 import twitter
-import tweets/secrets
+import secrets
 import re
 
 api = twitter.Api(consumer_key = secrets.consumer_key,

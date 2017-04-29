@@ -1,0 +1,42 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+	<main class="container">
+		<div class="container">
+            <h2>Tweets Must Sound</h2> </br></br>
+
+            Aenean pellentesque condimentum lacinia. Suspendisse placerat ligula sit amet lacinia fermentum. Quisque pulvinar erat ipsum, in mattis eros facilisis ac. Nam sed nisi tempus, hendrerit enim a, imperdiet purus. Vivamus ac consectetur lacus. Proin fringilla elit magna, vel sollicitudin sem volutpat vitae. Maecenas ut nisi maximus, aliquam augue sit amet, dapibus orci. Nulla ultricies vulputate ipsum et pharetra. </br></br>
+
+            Donec suscipit magna ac suscipit fringilla. Duis eu pellentesque tellus. Cras augue velit, posuere vel gravida et, cursus ut lectus. Suspendisse sit amet lectus quis eros rutrum porta a ac dui. Etiam in suscipit mauris. In vel sem sed est condimentum pretium id at lorem. Pellentesque in pulvinar lectus. Nulla magna odio, mattis et dui et, tempor pellentesque ligula. Cras in ultricies metus, quis vestibulum ipsum. </br></br>
+        </div>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <div>
+			<form class="vertical-center" action="/process/" method="post">
+        		{% csrf_token %}
+
+  				<div class="input-group">
+    				<div class="input-group-addon">@</div>
+    				<input name="screen_name" type="text" class="form-control" id="inlineFormInputGroup" placeholder="realDonaldTrump">
+  				</div>
+
+  				<button type="submit" class="btn btn-primary">GO!</button>
+			</form>
+		</div>
+    </main>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>
