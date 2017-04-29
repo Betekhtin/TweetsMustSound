@@ -5,7 +5,7 @@ import re
 class TwitMiner:
 ####################################################initialize twitter api
 	def __init__(self):
-		self.api = 	twitter.Api(consumer_key = secrets.consumer_key,
+		self.api = twitter.Api(consumer_key = secrets.consumer_key,
 				  consumer_secret = secrets.consumer_secret,
 				  access_token_key = secrets.access_token_key,
 				  access_token_secret = secrets.access_token_secret)
@@ -21,31 +21,36 @@ class TwitMiner:
 		numofload = 5 #total numbers of target tweets
 		numofhashedtweets = 50 #numbers of searched tweets by hashes
 		numberofRT = 5 #number of retweets in searched by hashes 
-
+		numofInitialLoad = 20 #number of initial load with respect to needs in finding 1 hashed tweet
 		#####initial search
-		statuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&lang=en&count=" + str(numofload))
+		statuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&lang=en&count=" + str(numofInitialLoad))		
 		iterations = min(statuses[0].user.statuses_count // numofload, 16)
 		statuses = [s for s in statuses if '#' in s.text]
+		if len(statuses) > numofload:
+			ind = 0, numofload - len(statuses)
+			for k in sorted(ind, reverse=True):
+				del statuses[k]
+			del statuses[-1]
+			######iterate over max allowed tweets to get w\o exceeding rate
+		else:
+			for i in range(0,iterations):
+				lastId = statuses[-1].id
 
-		######iterate over max allowed tweets to get w\o exceeding rate
-		for i in range(0,iterations):
-			lastId = statuses[-1].id
+				#search on iteration
+				newstatuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&max_id=" + str(lastId) + "&lang=en&count=" + str(numofload))
+				newstatuses_hashed = [s for s in newstatuses if '#' in s.text]
 
-			#search on iteration
-			newstatuses = self.api.GetSearch(raw_query = "q=from%3A" + username + "&max_id=" + str(lastId) + "&lang=en&count=" + str(numofload))
-			newstatuses_hashed = [s for s in newstatuses if '#' in s.text]
+				#calc last iteration with respect to total numbers of target tweets
+				if len(newstatuses_hashed) + len(statuses) > numofload:
+					ind = 0, numofload - len(statuses)
+					for k in sorted(ind, reverse=True):
+						del newstatuses_hashed[k]
+					del newstatuses_hashed[-1]
 
-			#calc last iteration with respect to total numbers of target tweets
-			if len(newstatuses_hashed) + len(statuses) > numofload:
-				ind = 0, numofload - len(statuses)
-				for k in sorted(ind, reverse=True):
-					del newstatuses_hashed[k]
-				del newstatuses_hashed[-1]
-
-			#fill result search and check total number of target tweets
-			statuses += newstatuses_hashed
-			if len(statuses)>=numofload:
-				break
+				#fill result search and check total number of target tweets
+				statuses += newstatuses_hashed
+				if len(statuses)>=numofload:
+					break
 
 		#get tweet text from tweet obj
 		statuses_text = [(s.text) for s in statuses]
@@ -73,11 +78,6 @@ class TwitMiner:
 							t.append(self.clean_tweet(s.text))
 						else:
 							if s.text[0:2] == "RT":
-								#4 and 6 - magic
-								if s.text[4:6] != previous[4:6]:
-									curr_numRT = 0
-									previous = s.text
-									t.append(self.clean_tweet(s.text))
 								continue
 							else:
 								curr_numRT = 0
@@ -85,7 +85,7 @@ class TwitMiner:
 		###################### return target tweets and tweets searched by hashes 
 		return statuses_text, hash_stat
 
-uname = "jayzclassicbars"
+uname = "realDonaldTrump"
 
 gtw = TwitMiner()
 tw,htw = gtw.get_tweets(uname)
