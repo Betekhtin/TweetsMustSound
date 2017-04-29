@@ -1,5 +1,5 @@
 import twitter
-import tweets/secrets
+import secrets
 import re
 
 class TwitMiner:
@@ -70,8 +70,10 @@ class TwitMiner:
 								curr_numRT = curr_numRT + 1
 							t.append(self.clean_tweet(s.text))
 						else:
-							curr_numRT = 0
-							break;
+							if s.text[0:2] == "RT":
+								continue
+							else:
+								curr_numRT = 0
 				hash_stat.append(t)
 		###################### return target tweets and tweets searched by hashes 
 		return statuses_text, hash_stat
