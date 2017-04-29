@@ -61,6 +61,7 @@ class TwitMiner:
 			curr_numRT = 0
 			for i in h:
 				t=[]
+				previous = []
 				if len(i)>0:
 					it_data = self.api.GetSearch(raw_query = "q=twitter%20" + i + "&lang=en&count=" + str(numofhashedtweets))
 					####control number of retweeted tweets by one hash
@@ -68,9 +69,15 @@ class TwitMiner:
 						if curr_numRT < numberofRT:
 							if s.text[0:2] == "RT":
 								curr_numRT = curr_numRT + 1
+							previous = s.text							
 							t.append(self.clean_tweet(s.text))
 						else:
 							if s.text[0:2] == "RT":
+								#4 and 6 - magic
+								if s.text[4:6] != previous[4:6]:
+									curr_numRT = 0
+									previous = s.text
+									t.append(self.clean_tweet(s.text))
 								continue
 							else:
 								curr_numRT = 0
