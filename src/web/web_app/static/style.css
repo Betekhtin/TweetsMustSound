@@ -10,14 +10,30 @@ body {
 img {
     border: 5px solid white ;
     border-radius: 10px;
+    margin-right: 10px; 
 }
 
-span {
+.input {
+	margin-top: 20px;
+}
+
+.go_back {
+	position: absolute; 
+	top: 20px; 
+	left: 20px;
+}
+
+.user_name, .screen_name, .description, .user_name_small, .no_tweet_message {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .user_name {
 	font-size: 22px;
+	font-weight: 700;
+}
+
+.user_name_small {
+	font-size: 15px;
 	font-weight: 700;
 }
 
@@ -29,4 +45,24 @@ span {
 .description {
 	font-size: 14px;
 	font-weight: 400;
+}
+
+.user_header {
+	margin-top: 10px;
+}
+
+.tweet {
+	background: white;
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+
+.no_tweet_message {
+	font-size: 20px;
+	color: #6987A6;
+}
+
+.error_message {
+	font-weight: bold;
+	color: red;
 }
