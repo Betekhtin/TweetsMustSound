@@ -19,9 +19,9 @@
         <div class="user_header vertical-center">
             <img src="{{ image_big }}">
             <div>
-            <span class = "user_name"> {{ name }} </span> <br>
-            <a class = "screen_name" href="https://www.twitter.com/@{{screen_name}}"> @{{ screen_name }} </a> <br>
-            <span class = "description"> {{ description }} </span> <br>
+                <span class = "user_name"> {{ name }} </span> <br>
+                <a class = "screen_name" href="https://www.twitter.com/@{{screen_name}}"> @{{ screen_name }} </a> <br>
+                <span class = "description"> {{ description }} </span> <br>
             </div>
         </div>
         <hr>
@@ -29,16 +29,25 @@
         
         {% for tweet in tweets %}
 
-        <div class="tweet vertical-center">
-            <div>
+        <div class="tweet container">
+            <div class="tweet_content col-md-8">
                 <img src="{{ image_normal }}">
                 <span class = "user_name_small"> {{ name }} </span> - 
-                <span> {{ tweet.created_at }} </span>
-                <div>
+                <span class="tweet_time"> {{ tweet.created_at }} </span>
+                <div class="tweet_text">
                     {{ tweet.text }}
                 </div>
             </div>
-            <div>
+            
+            <div class="col-md-4">
+
+                <div>
+                    Artist - Track
+                </div>
+                <audio controls>
+                    <source src="123.mp3" type="audio/mpeg">
+                    </source>
+                </audio>
             </div>
         </div>
 
