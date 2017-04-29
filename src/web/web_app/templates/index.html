@@ -20,19 +20,21 @@
 
             Donec suscipit magna ac suscipit fringilla. Duis eu pellentesque tellus. Cras augue velit, posuere vel gravida et, cursus ut lectus. Suspendisse sit amet lectus quis eros rutrum porta a ac dui. Etiam in suscipit mauris. In vel sem sed est condimentum pretium id at lorem. Pellentesque in pulvinar lectus. Nulla magna odio, mattis et dui et, tempor pellentesque ligula. Cras in ultricies metus, quis vestibulum ipsum. </br></br>
         </div>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        <div>
+        {% if error_message %}<p class="error_message">{{ error_message }}</p>{% endif %}
+        
+        <div class="input">
 			<form class="vertical-center" action="/process/" method="post">
         		{% csrf_token %}
 
   				<div class="input-group">
     				<div class="input-group-addon">@</div>
-    				<input name="screen_name" type="text" class="form-control" id="inlineFormInputGroup" placeholder="realDonaldTrump">
+    				<input name="screen_name" type="text" class="form-control" id="inlineFormInputGroup" placeholder="realDonaldTrump" required>
   				</div>
 
   				<button type="submit" class="btn btn-primary">GO!</button>
 			</form>
 		</div>
+    
     </main>
     
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
