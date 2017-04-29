@@ -1,5 +1,5 @@
 import twitter
-import secrets
+import tweets/secrets
 import re
 
 class TwitMiner:

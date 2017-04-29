@@ -1,0 +1,32 @@
+
+.vertical-center {
+  	display: flex;
+}
+
+body {
+	background-color: #F5F8FA;
+}
+
+img {
+    border: 5px solid white ;
+    border-radius: 10px;
+}
+
+span {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.user_name {
+	font-size: 22px;
+	font-weight: 700;
+}
+
+.screen_name {
+	font-size: 14px;
+	color: #6987A6;
+}
+
+.description {
+	font-size: 14px;
+	font-weight: 400;
+}
