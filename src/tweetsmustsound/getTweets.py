@@ -28,7 +28,7 @@ class TwitMiner:
 		statuses = [s for s in statuses if '#' in s.text]
 		if len(statuses) > numofload:
 			ind = 0, numofload - len(statuses)
-			for k in sorted(ind, reverse=True):
+			for k in sorted(ind, reverse = True):
 				del statuses[k]
 			del statuses[-1]
 			######iterate over max allowed tweets to get w\o exceeding rate
@@ -53,12 +53,10 @@ class TwitMiner:
 					break
 
 		#get tweet text from tweet obj
-		statuses_text = [(s.text) for s in statuses]
+		statuses_text = [self.clean_tweet(s.text) for s in statuses]
 		
 		#get hashes from tweet text
 		st_hashes = [["%23" + shashtags_single.text for shashtags_single in s.hashtags] for s in statuses]
-		print(st_hashes)
-		statuses_text = [self.clean_tweet(s.text) for s in statuses]
 
 		hash_stat =[]
 		#get tweets by hashes for every tweet
@@ -66,15 +64,13 @@ class TwitMiner:
 			curr_numRT = 0
 			for i in h:
 				t=[]
-				previous = []
 				if len(i)>0:
 					it_data = self.api.GetSearch(raw_query = "q=twitter%20" + i + "&lang=en&count=" + str(numofhashedtweets))
 					####control number of retweeted tweets by one hash
 					for s in it_data:
 						if curr_numRT < numberofRT:
 							if s.text[0:2] == "RT":
-								curr_numRT = curr_numRT + 1
-							previous = s.text							
+								curr_numRT = curr_numRT + 1				
 							t.append(self.clean_tweet(s.text))
 						else:
 							if s.text[0:2] == "RT":
